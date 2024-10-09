@@ -1,4 +1,5 @@
-﻿using EnterpriseLayer;
+﻿using Application.Exceptions;
+using EnterpriseLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace Application
         {
             var console = _mapper.Map(consoleDto);
             if (string.IsNullOrEmpty(console.Name))
-                throw new Exception("El Nombre no puede ser vacio");
+                throw new ValidationException("El Nombre no puede ser vacio");
 
             await _repository.AddAsync(console);
 

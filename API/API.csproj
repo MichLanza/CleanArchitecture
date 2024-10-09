@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.10.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
@@ -15,9 +17,11 @@
     <ProjectReference Include="..\Adapters\DataAdapters.csproj" />
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\EnterpriseLayer\EnterpriseLayer.csproj" />
+    <ProjectReference Include="..\ExternalServiceFrameworkDriver\ExternalServiceFrameworkDriver.csproj" />
     <ProjectReference Include="..\MapperAdapter\MapperAdapter.csproj" />
     <ProjectReference Include="..\PresentersAdapters\PresentersAdapters.csproj" />
     <ProjectReference Include="..\RepositoryAdapters\RepositoryAdapters.csproj" />
+    <ProjectReference Include="..\Third´PartiesAdapters\ThirdPartiesAdapters.csproj" />
   </ItemGroup>
 
 </Project>
