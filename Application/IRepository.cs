@@ -9,6 +9,6 @@ namespace Application
 
         Task<IEnumerable<T>> GetAllAsync();
 
-        Task AddAsync(VideoGameConsole videoGameConsole);
+        Task AddAsync(T entity);
     }
 }
