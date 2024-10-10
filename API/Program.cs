@@ -40,6 +40,14 @@ builder.Services.AddScoped<IMapper<VideoGameConsoleRequestDto, VideoGameConsole>
 builder.Services.AddValidatorsFromAssemblyContaining<VideoGameConsoleValidator>();
 builder.Services.AddFluentValidationAutoValidation();
 
+builder.Services.AddScoped<GenerateSale<SaleRequestDto>>();
+builder.Services.AddScoped<GetSales>();
+builder.Services.AddScoped<IMapper<SaleRequestDto, Sale>, SaleMapper>();
+builder.Services.AddScoped<IRepository<Sale>,SaleRepository>();
+
+
+
+
 
 builder.Services.AddHttpClient<IExternalService<PostServiceDto>,PostService>(op =>
 {
@@ -97,6 +105,23 @@ app.MapGet("/post", async (GetPosts getPost) =>
 })
 .WithName("GetPosts")
 .WithOpenApi();
+
+
+app.MapPost("/sale", async (SaleRequestDto saleDto , GenerateSale<SaleRequestDto> saleUseCase) =>
+{
+     await saleUseCase.ExecuteAsync(saleDto);
+    return Results.Created();
+})
+.WithName("GenerateSale")
+.WithOpenApi();
+
+app.MapGet("/sale", async (GetSales saleUseCase) =>
+{
+    return await saleUseCase.ExecuteAsync();
+})
+.WithName("GetSales")
+.WithOpenApi();
+
 
 app.Run();
 
