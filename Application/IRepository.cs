@@ -11,4 +11,6 @@ namespace Application
 
         Task AddAsync(T entity);
     }
+
+
 }

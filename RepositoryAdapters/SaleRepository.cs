@@ -1,13 +1,14 @@
-﻿
-using Application;
+﻿using Application;
 using DataAdapters;
 using EnterpriseLayer;
 using Microsoft.EntityFrameworkCore;
 using ModelAdapters;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace RepositoryAdapters
 {
-    public class SaleRepository : IRepository<Sale>
+    public class SaleRepository : IRepository<Sale>, IRepositorySearch<SaleModel, Sale>
     {
         private readonly AppDbContext _appDbContext;
 
@@ -44,6 +45,7 @@ namespace RepositoryAdapters
              ).ToListAsync();
         }
 
+
         public async Task<Sale> GetByIdAsync(int id)
         {
             var saleModel = await _appDbContext.Sales.FirstOrDefaultAsync(s => s.Id == id);
@@ -54,5 +56,29 @@ namespace RepositoryAdapters
                 saleModel.Id
                 );
         }
+
+        public async Task<IEnumerable<Sale>> GetAsync(Expression<Func<SaleModel, bool>> predicate)
+        {
+            var salesModel = await _appDbContext.Sales.Include("Concept").Where(predicate).ToListAsync();
+
+            var sales = new List<Sale>();
+
+            foreach (var saleModel in salesModel)
+            {
+                var concepts = new List<Concept>();
+                foreach (var conceptModel in saleModel.Concepts)
+                {
+                    var concept = new Concept(conceptModel.Quantity, conceptModel.UnitPrice, conceptModel.IdConsole);
+                    concepts.Add(concept);
+                }
+
+                var sale = new Sale(saleModel.CreationDate, concepts, saleModel.Id);
+                sales.Add(sale);
+            }
+
+            return sales;
+
+        }
+
     }
 }

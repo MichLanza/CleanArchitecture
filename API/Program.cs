@@ -9,6 +9,7 @@ using FluentValidation.AspNetCore;
 using MapperAdapter;
 using MapperAdapter.Dto.Request;
 using Microsoft.EntityFrameworkCore;
+using ModelAdapters;
 using PresentersAdapters;
 using RepositoryAdapters;
 using ThirdPartiesAdapters;
@@ -42,8 +43,11 @@ builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddScoped<GenerateSale<SaleRequestDto>>();
 builder.Services.AddScoped<GetSales>();
+builder.Services.AddScoped<GetSalesSearch<SaleModel>>();
+
 builder.Services.AddScoped<IMapper<SaleRequestDto, Sale>, SaleMapper>();
 builder.Services.AddScoped<IRepository<Sale>,SaleRepository>();
+builder.Services.AddScoped<IRepositorySearch<SaleModel,Sale>, SaleRepository>();
 
 
 
@@ -122,6 +126,12 @@ app.MapGet("/sale", async (GetSales saleUseCase) =>
 .WithName("GetSales")
 .WithOpenApi();
 
+app.MapGet("/sale/{total}", async (GetSalesSearch<SaleModel> saleUseCase, decimal total) =>
+{
+    return await saleUseCase.ExecuteAsync(s => s.Total > total);
+})
+.WithName("GetSalesSearch")
+.WithOpenApi();
 
 app.Run();
 
